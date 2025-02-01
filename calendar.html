@@ -6,8 +6,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://seaquest-academy.com/wp-content/uploads/2025/01/favicon1.png" type="image/png">
-    <title>Calendar | SeaQuest Academy</title>
+    <link rel="icon" href="https://assets.hackclub.com/flag-standalone.svg" type="image/png">
+    <title>Calendar | High Seas</title>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
@@ -15,8 +15,14 @@
         import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, onSnapshot, query, orderBy } 
           from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
       
-        const firebaseConfig = {
-            //API KEY HERE
+          const firebaseConfig = {
+            apiKey: "AIzaSyBRocuCXr6zBpauLs6nSLEo_CBe29_vp1E",
+            authDomain: "calendar-eec37.firebaseapp.com",
+            projectId: "calendar-eec37",
+            storageBucket: "calendar-eec37.firebasestorage.app",
+            messagingSenderId: "338748857741",
+            appId: "1:338748857741:web:24d41a9a20be4d1e7b31c4",
+            measurementId: "G-8T1BJK1F25"
         };
       
         // Initialize Firebase
@@ -647,8 +653,8 @@
 <body>
     <div class="header">
         <div class="logo-container">
-            <a href="https://seaquest-academy.com"><img src="https://seaquest-academy.com/wp-content/uploads/2025/01/SEAQUEST_HORIZONTAL.png" 
-                 alt="SeaQuest Logo" 
+            <a href="https://seaquest-academy.com"><img src="https://assets.hackclub.com/flag-standalone.svg" 
+                 alt="Hack Club Logo" 
                  class="brand-logo"></a>
             <h1>Calendar</h1>
             <h7>v1.4.16</h7>
@@ -668,8 +674,8 @@
                 <input type="time" id="startTimeInput" required>
                 <input type="time" id="endTimeInput" required>
                 <select id="eventSchoolInput">
-                    <option value="MCM">MCM</option>
-                    <option value="Internal">Internal Session</option>
+                    <option value="hackathon">Hackathon</option>
+                    <option value="meeting">Hack Club Meeting</option>
                 </select>
                 <input type="number" id="eventStudentsInput" placeholder="Students" min="1" required>
                 <button onclick="createNewEvent()">Create Event</button>
@@ -696,13 +702,13 @@
         <p>Duration: <span id="eventDuration"></span></p>
         <p>Students: <span id="eventStudents"></span></p>
         <div class="assigned-instructors">
-            <strong>Assigned Instructors:</strong>
+            <strong>Leaders:</strong>
             <div id="instructorList"></div>
         </div>
         <div class="instructor-select-container">
-            <button onclick="toggleInstructorSelect()">Add Instructor</button>
+            <button onclick="toggleInstructorSelect()">Add leaders</button>
             <select id="instructorSelect" style="display: none;" onchange="handleInstructorSelect(this)">
-                <option value="">Select Instructor</option>
+                <option value="">Select Users</option>
             </select>
         </div>
         <div class="modal-button-group">
@@ -724,8 +730,8 @@
             <input type="time" id="newStartTime" required>
             <input type="time" id="newEndTime" required>
             <select id="newEventSchool">
-                <option value="MCM">MCM</option>
-                <option value="Internal">Internal Session</option>
+                <option value="hackathon">Hackathon</option>
+                <option value="meeting">Hack Club Meeting</option>
             </select>
             <input type="number" id="newEventStudents" placeholder="Students" min="1" required>
             <button onclick="createNewEventFromModal()">Create</button>
@@ -759,7 +765,7 @@
         /*let events = [{
             id: 1,
             date: '2025-02-08',
-            school: 'MCM',
+            school: 'hackathon',
             startTime: '09:30',
             endTime: '11:30',
             students: 8,
@@ -867,7 +873,7 @@
 
     function populateInstructorDropdown(users) {
         const instructorSelect = document.getElementById('instructorSelect');
-        instructorSelect.innerHTML = '<option value="">Select Instructor</option>';
+        instructorSelect.innerHTML = '<option value="">Select Leaders</option>';
         
         users.forEach(user => {
             const option = document.createElement('option');
@@ -963,9 +969,9 @@
         eventElement.innerHTML = `
             <div><strong>${formatTime(event.startTime)} - ${formatTime(event.endTime)}</strong></div>
             <div>${event.school}</div>
-            <div>${event.students} students</div>
+            <div>${event.students} participants</div>
             <div class="instructor-status">
-                ${event.assignedInstructors.length}/${required} Instructors
+                ${event.assignedInstructors.length}/${required} Leaders
                 ${event.assignedInstructors.map(id => {
                     const user = users.find(u => u.id === id);
                     return `<span class="instructor-chip" data-instructor="${id}" onclick="removeInstructor('${id}')">
@@ -1320,7 +1326,7 @@
             document.getElementById('eventDateInput').value = '';
             document.getElementById('startTimeInput').value = '';
             document.getElementById('endTimeInput').value = '';
-            document.getElementById('eventSchoolInput').value = 'MCM';
+            document.getElementById('eventSchoolInput').value = 'hackathon';
             document.getElementById('eventStudentsInput').value = '';
         }
 
@@ -1343,7 +1349,7 @@
                     ${user ? user.name : 'Unknown'}
                     <span class="remove-chip">×</span>
                 </span>`;
-            }).join('') || 'No instructors assigned';
+            }).join('') || 'No attendees assigned';
 
             document.getElementById('modalOverlay').classList.add('active');
             document.getElementById('eventModal').classList.add('active');
